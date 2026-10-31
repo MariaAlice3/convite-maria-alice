@@ -27,7 +27,7 @@ label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}
 input,select{width:100%;padding:12px;border-radius:12px;border:1.5px solid #e9b6d1;background:white;color:#70315e;font-size:16px}
 input:focus,select:focus{outline:2px solid #c94d91}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .send{width:100%;border:0;background:linear-gradient(90deg,#ee6baa,#c53c88);border-radius:40px;color:white;font-size:17px;font-weight:bold;padding:15px;cursor:pointer;margin-top:20px;box-shadow:0 5px 12px #a23d7450}
-.send:disabled{opacity:.55}.privacy{font-size:12px;color:#805b73;line-height:1.5}.status{background:#f9dcec;border-radius:12px;padding:13px;text-align:center;margin-top:12px;font-size:14px}.hide{display:none!important}
+.send:disabled{opacity:.55}.privacy{font-size:12px;color:#805b73;line-height:1.5}.success-card{background:linear-gradient(145deg,#fff4fa,#fce3f3);border:2px solid #edb5d8;border-radius:22px;text-align:center;padding:25px 15px;margin-top:12px;animation:rise .4s ease}.success-card .big{font-size:52px;display:block}.success-card h2{font-family:Georgia,serif;color:#bc3d87;font-size:24px;margin:9px 0}.success-card p{line-height:1.5;font-size:15px}.success-card button{border:0;background:#c74790;color:white;border-radius:25px;padding:12px 25px;cursor:pointer;font-weight:bold}.status{background:#f9dcec;border-radius:12px;padding:13px;text-align:center;margin-top:12px;font-size:14px}.hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
 </style></head>
 <body><main class="stage">
@@ -47,26 +47,38 @@ input:focus,select:focus{outline:2px solid #c94d91}.twocol{display:grid;grid-tem
 <label for="telefone">WhatsApp (opcional)</label><input id="telefone" name="telefone" type="tel" maxlength="25" autocomplete="tel" placeholder="(83) 99999-9999">
 <label for="presenca">Você poderá comparecer?</label><select id="presenca" name="presenca" onchange="toggleGuests()"><option value="Sim">Sim! Estarei presente 🦋</option><option value="Não">Infelizmente não poderei ir</option></select>
 <div id="guests" class="twocol"><div><label for="adultos">Adultos</label><select name="adultos" id="adultos"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div><label for="criancas">Crianças</label><select name="criancas" id="criancas"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div></div>
+<div class="hide" aria-hidden="true"><label for="website">Deixe vazio</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
 <p class="privacy">Seus dados serão utilizados apenas para organizar a festa e não serão exibidos aos demais convidados.</p>
 <button class="send" id="send" type="submit">💗 Enviar confirmação</button><div id="status" aria-live="polite"></div>
 </form>
 </section></div>
 <script>
 // Cole aqui a URL do aplicativo Web do Google Apps Script para ativar o registro na planilha:
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbx8V5veM2gULVmm6gWpmRtZg7VkLlB52wK2On59j6Z7y6U835u3rSxc4WPSdiLZXcve/exec";
+https://script.google.com/macros/s/AKfycbx8V5veM2gULVmm6gWpmRtZg7VkLlB52wK2On59j6Z7y6U835u3rSxc4WPSdiLZXcve/exec
 const modal=document.getElementById('backdrop');
 function openModal(){modal.classList.add('show');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('nome').focus(),300)}
 function closeModal(){modal.classList.remove('show');document.body.style.overflow=''}
 function toggleGuests(){document.getElementById('guests').classList.toggle('hide',document.getElementById('presenca').value==='Não')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 document.getElementById('rsvp').addEventListener('submit',async e=>{
-e.preventDefault();const status=document.getElementById('status'),button=document.getElementById('send');
-if(!SCRIPT_URL){status.innerHTML='<div class="status">🌸 Formulário de demonstração. Para salvar os convidados, conecte o Google Sheets conforme as instruções incluídas no pacote.</div>';return}
-const data=new FormData(e.currentTarget);if(data.get('presenca')==='Não'){data.set('adultos','0');data.set('criancas','0')}
-button.disabled=true;status.innerHTML='<div class="status">Enviando sua resposta…</div>';
-try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(data)});
-status.innerHTML='<div class="status">🦋 Resposta enviada! Confira o registro na planilha para confirmar o recebimento. 💗</div>';e.currentTarget.reset();toggleGuests()}
-catch{status.innerHTML='<div class="status">Não foi possível enviar. Tente novamente.</div>'}
-finally{button.disabled=false}
+  e.preventDefault();
+  const form=e.currentTarget,status=document.getElementById('status'),button=document.getElementById('send');
+  if(!SCRIPT_URL){status.innerHTML='<div class="status">⚠️ A conexão com a planilha ainda não foi configurada.</div>';return;}
+  const data=new FormData(form);
+  if(data.get('presenca')==='Não'){data.set('adultos','0');data.set('criancas','0');}
+  const presenca=data.get('presenca');
+  button.disabled=true;button.textContent='🦋 Enviando...';
+  status.innerHTML='<div class="status" role="status">Aguarde, enviando sua resposta…</div>';
+  try {
+    // Apps Script does not expose CORS response headers; this request can be sent,
+    // but a fulfilled opaque response is NOT proof that Sheets wrote the row.
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(data)});
+    form.innerHTML='<div class="success-card" role="status"><span class="big">🦋🌸</span><h2>'+
+      (presenca==='Sim'?'Que alegria!':'Obrigado por avisar!')+'</h2><p>'+
+      (presenca==='Sim'?'Sua confirmação foi enviada! A Maria Alice espera por você para um dia muito especial. 💗':'Sua resposta foi enviada. Obrigado pelo carinho! 💗')+
+      '</p><p style="font-size:12px;color:#805b73">O envio foi solicitado. O registro definitivo deve ser conferido na planilha pela organização.</p><button type="button" onclick="closeModal()">Fechar 🌷</button></div>';
+  } catch(error) {
+    status.innerHTML='<div class="status" role="alert">⚠️ Não conseguimos concluir o envio. Confira sua conexão com a internet e tente novamente. Se continuar, avise a pessoa que enviou o convite.</div>';
+  } finally {button.disabled=false;button.textContent='💗 Enviar confirmação';}
 });
 </script></body></html>
