@@ -53,8 +53,7 @@ input:focus,select:focus{outline:2px solid #c94d91}.twocol{display:grid;grid-tem
 </form>
 </section></div>
 <script>
-// Cole aqui a URL do aplicativo Web do Google Apps Script para ativar o registro na planilha:
-https://script.google.com/macros/s/AKfycbx8V5veM2gULVmm6gWpmRtZg7VkLlB52wK2On59j6Z7y6U835u3rSxc4WPSdiLZXcve/exec
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8V5veM2gULVmm6gWpmRtZg7VkLlB52wK2On59j6Z7y6U835u3rSxc4WPSdiLZXcve/exec";
 const modal=document.getElementById('backdrop');
 function openModal(){modal.classList.add('show');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('nome').focus(),300)}
 function closeModal(){modal.classList.remove('show');document.body.style.overflow=''}
