@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f9c5df"><title>Maria Alice — Jardim das Borboletas 🦋</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top,#fff5fa,#f4dbea 60%,#e9d6f5);font-family:"Trebuchet MS",system-ui,sans-serif;color:#70315e}
+.stage{width:min(100%,570px);margin:auto;position:relative;overflow:hidden;box-shadow:0 0 55px #8d38602e;isolation:isolate}
+.poster{display:block;width:100%;height:auto}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 28%,#ffffff24 45%,transparent 60%);background-size:250% 100%;animation:shine 11s ease-in-out infinite}
+@keyframes shine{0%,60%{background-position:180% 0}100%{background-position:-100% 0}}
+.fly{position:absolute;z-index:2;pointer-events:none;filter:drop-shadow(0 3px 3px #5c2d6055);font-size:clamp(21px,5vw,37px);animation:float 8s ease-in-out infinite alternate}
+.fly.a{top:9%;left:6%}.fly.b{top:33%;right:4%;animation-delay:-2.5s}.fly.c{top:65%;left:7%;animation-delay:-4.8s}.fly.d{top:83%;right:8%;animation-delay:-1.2s}
+@keyframes float{0%{transform:translate(-9px,10px) rotate(-15deg) scale(.9)}50%{transform:translate(18px,-24px) rotate(12deg) scale(1.15)}100%{transform:translate(-4px,12px) rotate(-12deg)}}
+.spark{position:absolute;z-index:2;width:5px;height:5px;border-radius:50%;background:white;box-shadow:0 0 10px 3px #fff6b8;animation:twinkle 3s infinite alternate;pointer-events:none}
+@keyframes twinkle{from{opacity:.1;transform:scale(.3)}to{opacity:1;transform:scale(1.6)}}
+.spark.s1{top:15%;left:80%}.spark.s2{top:47%;left:15%;animation-delay:1s}.spark.s3{top:75%;left:82%;animation-delay:2s}.spark.s4{top:22%;left:46%;animation-delay:1.7s}
+.cta{position:absolute;z-index:5;left:19%;width:62%;top:87.5%;height:6.7%;border:0;border-radius:70px;background:transparent;cursor:pointer}
+.cta:focus-visible{outline:4px solid #7b2e78;outline-offset:3px}
+.hint{position:absolute;z-index:5;left:0;right:0;bottom:1%;text-align:center;color:#69395e;font-size:clamp(10px,2.5vw,14px);text-shadow:0 1px 3px #fff;font-weight:bold}
+.backdrop{position:fixed;z-index:20;inset:0;background:#3c183f99;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px)}
+.backdrop.show{display:flex;animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{background:linear-gradient(145deg,#fffafc,#ffedf7);border:3px solid #fff;border-radius:27px;width:min(100%,450px);max-height:92dvh;overflow:auto;padding:25px 21px;box-shadow:0 20px 70px #36102e60;position:relative;animation:rise .45s cubic-bezier(.2,.9,.2,1)}
+@keyframes rise{from{transform:translateY(35px) scale(.95);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.close{position:absolute;right:12px;top:9px;border:0;background:#f7d5e7;border-radius:50%;width:35px;height:35px;font-size:22px;cursor:pointer;color:#8a3570}
+h1{font-family:Georgia,serif;color:#c23f89;font-size:28px;text-align:center;margin:5px 25px 8px}p.lead{text-align:center;font-size:14px;margin:0 0 15px}
+label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1.5px solid #e9b6d1;background:white;color:#70315e;font-size:16px}
+input:focus,select:focus{outline:2px solid #c94d91}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.send{width:100%;border:0;background:linear-gradient(90deg,#ee6baa,#c53c88);border-radius:40px;color:white;font-size:17px;font-weight:bold;padding:15px;cursor:pointer;margin-top:20px;box-shadow:0 5px 12px #a23d7450}
+.send:disabled{opacity:.55}.privacy{font-size:12px;color:#805b73;line-height:1.5}.status{background:#f9dcec;border-radius:12px;padding:13px;text-align:center;margin-top:12px;font-size:14px}.hide{display:none!important}
+@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
+</style></head>
+<body><main class="stage">
+<img class="poster" src="convite.png" alt="Convite Maria Alice 3 anos, Jardim das Borboletas. 19 de dezembro, às 16 horas. Rua Cruzeiro do Sul, 280.">
+<span class="fly a" aria-hidden="true">🦋</span><span class="fly b" aria-hidden="true">🦋</span><span class="fly c" aria-hidden="true">🦋</span><span class="fly d" aria-hidden="true">🦋</span>
+<i class="spark s1"></i><i class="spark s2"></i><i class="spark s3"></i><i class="spark s4"></i>
+<button class="cta" onclick="openModal()" aria-label="Confirmar presença na festa da Maria Alice"></button>
+<div class="hint">👆 Toque no botão rosa para confirmar sua presença</div>
+</main>
+<div class="backdrop" id="backdrop" onclick="if(event.target===this)closeModal()">
+<section class="modal" role="dialog" aria-modal="true" aria-labelledby="heading">
+<button class="close" onclick="closeModal()" aria-label="Fechar">×</button>
+<h1 id="heading">🦋 Nosso jardim espera por você!</h1>
+<p class="lead">Confirme sua presença nos 3 aninhos da Maria Alice 🌸</p>
+<form id="rsvp">
+<label for="nome">Nome do convidado *</label><input id="nome" name="nome" maxlength="100" autocomplete="name" placeholder="Seu nome" required>
+<label for="telefone">WhatsApp (opcional)</label><input id="telefone" name="telefone" type="tel" maxlength="25" autocomplete="tel" placeholder="(83) 99999-9999">
+<label for="presenca">Você poderá comparecer?</label><select id="presenca" name="presenca" onchange="toggleGuests()"><option value="Sim">Sim! Estarei presente 🦋</option><option value="Não">Infelizmente não poderei ir</option></select>
+<div id="guests" class="twocol"><div><label for="adultos">Adultos</label><select name="adultos" id="adultos"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div><label for="criancas">Crianças</label><select name="criancas" id="criancas"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div></div>
+<p class="privacy">Seus dados serão utilizados apenas para organizar a festa e não serão exibidos aos demais convidados.</p>
+<button class="send" id="send" type="submit">💗 Enviar confirmação</button><div id="status" aria-live="polite"></div>
+</form>
+</section></div>
+<script>
+// Cole aqui a URL do aplicativo Web do Google Apps Script para ativar o registro na planilha:
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbx8V5veM2gULVmm6gWpmRtZg7VkLlB52wK2On59j6Z7y6U835u3rSxc4WPSdiLZXcve/exec";
+const modal=document.getElementById('backdrop');
+function openModal(){modal.classList.add('show');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('nome').focus(),300)}
+function closeModal(){modal.classList.remove('show');document.body.style.overflow=''}
+function toggleGuests(){document.getElementById('guests').classList.toggle('hide',document.getElementById('presenca').value==='Não')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.getElementById('rsvp').addEventListener('submit',async e=>{
+e.preventDefault();const status=document.getElementById('status'),button=document.getElementById('send');
+if(!SCRIPT_URL){status.innerHTML='<div class="status">🌸 Formulário de demonstração. Para salvar os convidados, conecte o Google Sheets conforme as instruções incluídas no pacote.</div>';return}
+const data=new FormData(e.currentTarget);if(data.get('presenca')==='Não'){data.set('adultos','0');data.set('criancas','0')}
+button.disabled=true;status.innerHTML='<div class="status">Enviando sua resposta…</div>';
+try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(data)});
+status.innerHTML='<div class="status">🦋 Resposta enviada! Confira o registro na planilha para confirmar o recebimento. 💗</div>';e.currentTarget.reset();toggleGuests()}
+catch{status.innerHTML='<div class="status">Não foi possível enviar. Tente novamente.</div>'}
+finally{button.disabled=false}
+});
+</script></body></html>
